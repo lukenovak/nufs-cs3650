@@ -24,5 +24,7 @@ int    storage_set_time(const char* path, const struct timespec ts[2]);
 int    storage_symlink(const char* to, const char* from);
 int    storage_readlink(const char* path, char* buf, size_t size);
 slist* storage_list(const char* path);
+void   storage_update_ctime(const char* path);
+int    storage_chmod(const char* path, mode_t mode);
 
 #endif

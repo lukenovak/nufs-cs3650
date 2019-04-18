@@ -231,6 +231,23 @@ storage_set_time(const char* path, const struct timespec ts[2])
     return 0;
 }
 
+void   storage_update_ctime(const char* path) {
+    int inum = tree_lookup(path);
+    if (inum < 0) {
+        return;
+    }
+    get_inode(inum)->ctim = time(NULL);
+}
+
+int    storage_chmod(const char* path, mode_t mode) {
+    int inum = tree_lookup(path);
+    if (inum < 0) {
+        return -ENOENT;
+    }
+    inode* node = get_inode(inum);
+    node->mode = node->mode & ~07777 & mode;
+}
+
 static
 void storage_update_time(inode* dd, time_t newa, time_t newm)
 {

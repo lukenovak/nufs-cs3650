@@ -142,6 +142,7 @@ nufs_rename(const char *from, const char *to)
 {
     int rv = -1;
     rv = storage_rename(from, to);
+    storage_update_ctime(to);
     printf("rename(%s => %s) -> %d\n", from, to, rv);
     return rv;
 }
@@ -150,6 +151,8 @@ int
 nufs_chmod(const char *path, mode_t mode)
 {
     int rv = -1;
+    rv = storage_chmod(path, mode);
+    storage_update_ctime(path);
     printf("chmod(%s, %04o) -> %d\n", path, mode, rv);
     return rv;
 }
@@ -159,6 +162,7 @@ nufs_truncate(const char *path, off_t size)
 {
     int rv = -1;
     rv = storage_truncate(path, size);
+    storage_update_ctime(path);   
     printf("truncate(%s, %ld bytes) -> %d\n", path, size, rv);
     return rv;
 }
@@ -200,6 +204,7 @@ nufs_utimens(const char* path, const struct timespec ts[2])
 {
     int rv = -1;
     rv = storage_set_time(path, ts);
+    storage_update_ctime(path);
     printf("utimens(%s, [%ld, %ld; %ld %ld]) -> %d\n",
            path, ts[0].tv_sec, ts[0].tv_nsec, ts[1].tv_sec, ts[1].tv_nsec, rv);
     return rv;
